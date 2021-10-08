@@ -1,0 +1,69 @@
+{
+    "listeners": {
+        "*:80": {
+            "pass": "routes/cakephp"
+        }
+    },
+    "routes": {
+        "cakephp": [
+            {
+                "match": {
+                    "uri": [
+                        "*.php",
+                        "*.php/*"
+                    ]
+                },
+                "action": {
+                    "pass": "applications/cakephp/direct"
+                }
+            },
+            {
+                "action": {
+                    "share": "/home/timo/Documents/cakefest21demo/webroot",
+                    "fallback": {
+                        "pass": "applications/cakephp/index"
+                    }
+                }
+            }
+        ]
+    },
+    "applications": {
+        "cakephp": {
+            "type": "php",
+            "user": "caketst",
+            "group": "caketst",
+            "processes": {
+                "max": 20,
+                "spare": 5,
+                "idle_timeout": 20
+            },            
+            "targets": {
+                "direct": {
+                    "root": "/home/timo/Documents/cakefest21demo/webroot"
+                },
+                "index": {
+                    "root": "/home/timo/Documents/cakefest21demo/webroot",
+                    "script": "index.php"
+                }
+            },
+            "environment": {
+                "VERSION": "0.0.2",
+                "DEBUG": "true",
+                "SECURITY_SALT": "CYVR8Bxu6YqGK3PCVyDB2K5Ly5EWm6Z-",
+                "DATABASE_URL":"mysql://root:password@127.0.0.1:3306/cakefest?encoding=utf8&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
+            },
+            "options": {
+                "file": "/etc/php.ini",
+                "admin": {
+                    "memory_limit": "512M",
+                    "variables_order": "EGPCS",
+                    "expose_php": "0"
+                },
+        
+                "user": {
+                    "display_errors": "0"
+                }
+            }
+        }
+    } 
+}
